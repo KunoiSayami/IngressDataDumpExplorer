@@ -106,8 +106,8 @@ class CustomLayer extends L.CanvasLayer {
 
         gl.useProgram(appProgramInfo.program);
 
-        draw(appProgramData.visitsBuffer, appProgramData.visitsSize, [0.8, 0.2, 0.1, 1.0]);
-        draw(appProgramData.capturesBuffer, appProgramData.capturesSize, [0.9, 0.4, 0.1, 1.0]);
+        draw(appProgramData.visitsBuffer, appProgramData.visitsSize, [1, 0, 0, 1.0]);
+        draw(appProgramData.capturesBuffer, appProgramData.capturesSize, [0, 0, 1, 1.0]);
     }
 
     _onLayerDidMove() {
@@ -150,18 +150,16 @@ function setUniforms(map, color) {
 }
 
 // INIT
-leafletMap = L.map('map').setView([51.0, 10.2], 7);
+leafletMap = L.map('map').setView([30.710492, 110.954297], 4);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{param}', { param: '' }).addTo(leafletMap);
 
 // Load data
-fetchJSON("/data.json", (result, error) => {
-    if (result) {
-        data = result;
+if (result) {
+    data = result;
 
-        // Create and add WebGL layer
-        var customLayer = new CustomLayer();
-        customLayer.addTo(leafletMap);
-    } else if (error) {
-        console.log(error);
-    }
-});
+    // Create and add WebGL layer
+    var customLayer = new CustomLayer();
+    customLayer.addTo(leafletMap);
+} else if (error) {
+    console.log(error);
+}
