@@ -20,7 +20,7 @@ Simply write an E-Mail to `privacy@nianticlabs.com`:
 * Run `upvmarker.exe` or compiled executable file.
 * After program process successfully, use a local browser to access `html/index.html`.
 
-<img src="example_screen.png" width="960px" />
+<img src="https://user-images.githubusercontent.com/16496671/46909015-42d60d80-cf5e-11e8-83aa-34da12e2c476.png" width="960px" />
 
 ### License
 

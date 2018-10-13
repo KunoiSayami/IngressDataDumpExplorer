@@ -21,13 +21,21 @@ bool hasEnding(std::string const &fullString, std::string const &ending) {
 
 int main()
 {
-	std::ifstream file("../game_log.tsv");
 	CSVRow csvrow;
+	std::ifstream file("../game_log.tsv");
 	if (file.is_open())
 		std::cout << "Processing....\n";
 	else {
-		std::cerr << "File not found or can't open\n";
-		return 1;
+		file.open("game_log.tsv");
+		if (!file.is_open()) {
+			std::cerr << "File not found or can't open\n";
+#ifdef _WIN32
+			system("pause");
+#endif
+			return 1;
+		}
+		else
+			std::cout << "Processing....\n";
 	}
 	while (file >> csvrow) {
 		if (csvrow[3] == "captured portal" && csvrow[4] != "failed")
@@ -36,24 +44,29 @@ int main()
 		if (csvrow[4] != "failed" && (csvrow[3].find("hacked") == 0 && hasEnding(csvrow[3], "portal")) || hasEnding(csvrow[3], "deployed"))
 			visits.insert(gen_unique_str(csvrow[1], csvrow[2]));
 	}
-	
+	file.close();
 	//std::cout << captures.size() << std::endl;
 	//std::cout << visits.size();
 	std::ofstream fout("../html/data.js");
-	if (fout.is_open()) {
-		fout << "result = {\"visits\": [";
-		for (std::string s : visits)
-			fout <<"[" << s << "], ";
-		fout << "], \"captures\": [";
-		for (std::string s : captures)
-			fout << "[" << s << "], ";
-		fout << "]}";
+	if (!fout.is_open()){
+		fout.open("html/data.js");
+		if (!fout.is_open()) {
+			std::cerr << "open output file error\n";
+#ifdef _WIN32
+			system("pause");
+#endif
+			return 1;
+		}
 	}
-	else {
-		std::cerr << "open output file error";
-		return 1;
-	}
-	std::cout << "Done!\nPlease open \"html / index.html\" to view your upv map";
+	fout << "result = {\"visits\": [";
+	for (std::string s : visits)
+		fout << "[" << s << "], ";
+	fout << "], \"captures\": [";
+	for (std::string s : captures)
+		fout << "[" << s << "], ";
+	fout << "]}";
+	fout.close();
+	std::cout << "Done!\nPlease open \"html / index.html\" to view your upv map\n";
 #ifdef _WIN32
 	system("pause");
 #endif
